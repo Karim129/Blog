@@ -13,12 +13,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users=User::query()->when(request('search'),function($query){
+        $users = User::query()->when(request('search'), function ($query) {
 
-            $query->where('name','like','%'.request('search').'%');
+            $query->where('name', 'like', '%' . request('search') . '%');
 
-        })->orderBy('created_at','desc')->paginate(10);
-        return view('user.index',['users'=>$users]);
+        })->orderBy('created_at', 'desc')->paginate(10);
+        return view('Users/index', ['users' => $users]);
     }
 
     /**
@@ -26,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-            return view('user.create');
+        return view('Users/create');
     }
 
     /**
@@ -35,12 +35,11 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image'=>'required',
+            'image' => 'required',
+        ]);
 
-
-        ])      ;
-
-    User::find($request->id)->update(['image'=>ImageService::upload($request->file('image'), 'users')]);
+        User::find($request->id)->update(['image' => ImageService::upload($request->file('image'), 'users')]);
+        return redirect()->route('users.index');
     }
 
     /**
@@ -48,7 +47,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('user.show',['user'=>$user]);
+        return view('Users/show', ['user' => $user]);
     }
 
     /**
@@ -56,22 +55,35 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        
+        return view('Users/edit', ['user' => $user]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'image' => 'required',
+
+        ]);
+        if ($request->hasFile('image')) {
+            ImageService::delete($user->image);
+            $user->update(['image' => ImageService::upload($request->file('image'), 'users')]);
+
+        }
+        return redirect()->route('users.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+
+        ImageService::delete($user->image);
+        $user->delete();
+        return redirect()->route('users.index');
+
     }
 }

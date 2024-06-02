@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsSeeder::class);
         $this->call(RolePermissionSeeder::class);
         $this->call(UserSeeder::class);
-        Contact::factory(10)->create();
 
     }
 }

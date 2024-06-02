@@ -19,9 +19,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::resource('user', UserController::class);
-Route::resource('post', PostController::class);
-Route::resource('comment', CommentController::class);
+Route::resource('users', UserController::class);
+Route::resource('posts', PostController::class);
+Route::resource('comments', CommentController::class);
 Route::get('settings', function () {
     return view('settings');
 });
