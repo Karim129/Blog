@@ -15,8 +15,8 @@ class Setting extends Model
         'settings' => 'array',
     ];
 
-    public function getSettingsAttribute($value)
-    {
-        return json_decode($value, true);
-    }
+    // public function getSettingsAttribute($value)
+    // {
+    //     return json_decode($value, true);
+    // }
 }
